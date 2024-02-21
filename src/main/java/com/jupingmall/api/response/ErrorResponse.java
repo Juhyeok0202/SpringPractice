@@ -22,7 +22,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ErrorResponse {
 
-    private final HttpStatusCode code;
+    private final String code;
     private final String message;
 
     /*Map 말고 개선해보자.*/
