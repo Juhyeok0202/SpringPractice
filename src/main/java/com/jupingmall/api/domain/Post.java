@@ -3,6 +3,7 @@ package com.jupingmall.api.domain;
 import com.jupingmall.api.request.PostCreate;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,12 +23,16 @@ public class Post {
     @Lob // DB에서는 Long Text 형태로 생성되도록 함
     private String content;
 
+    @Builder
     private Post(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
     public static Post createPost(PostCreate postCreate) {
-        return new Post(postCreate.getTitle(), postCreate.getContent());
+        return Post.builder()
+                .title(postCreate.getTitle())
+                .content(postCreate.getContent())
+                .build();
     }
 }
