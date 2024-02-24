@@ -6,12 +6,16 @@ import com.jupingmall.api.request.PostCreate;
 import com.jupingmall.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.jupingmall.api.domain.Post.createPost;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Slf4j
 @Service
@@ -46,8 +50,9 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList() {
-        return postRepository.findAll().stream()
+    public List<PostResponse> getList(Pageable pageable) {
+        // web -> page 1 -> (내부적으로) 0 변경 -> 수동으로 1로 해봤자 테스트 불가능(웹 요청을 통한 테스트 필요)
+        return postRepository.findAll(pageable).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
 

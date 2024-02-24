@@ -4,6 +4,11 @@ spring:
       enabled: true
       path: /h2-console
 
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true # 1부터 parameter를 시작하도록(단, Web 요청에서만!)
+        default-page-size: 5 # @PageableDefault와 같이 사용 X
   datasource:
     url: jdbc:h2:mem:jupingmall
     username: sa

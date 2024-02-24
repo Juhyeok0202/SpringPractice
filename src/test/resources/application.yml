@@ -1,0 +1,4 @@
+  data:
+    web:
+      pageable:
+        one-indexed-parameters: true # 1부터 parameter를 시작하도록
