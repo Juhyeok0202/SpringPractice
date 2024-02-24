@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static com.jupingmall.api.domain.Post.createPost;
 
 @Slf4j
@@ -30,17 +33,23 @@ public class PostService {
 
         // 응답 클래스 분리하세요 (서비스 정책에 맞는)
         // entity to response 작업을 여기서 하는게 맞을까?
-        PostResponse response = PostResponse.builder()
-                .id(post.getId())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .build();
 
         /** 답 (정답은 없지만, 아래 방법도 있다.)
          * Controller ->  WebPostService : response를 위함 -> Repository
          *                PostService : 다른 서비스와 통신하기 위함
          */
 
-        return response;
+        return PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .build();
+    }
+
+    public List<PostResponse> getList() {
+        return postRepository.findAll().stream()
+                .map(PostResponse::new)
+                .collect(Collectors.toList());
+
     }
 }

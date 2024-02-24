@@ -1,11 +1,7 @@
 package com.jupingmall.api.response;
 
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
 import java.util.HashMap;
 import java.util.Map;
