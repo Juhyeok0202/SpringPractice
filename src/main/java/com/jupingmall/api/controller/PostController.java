@@ -2,6 +2,7 @@ package com.jupingmall.api.controller;
 
 import com.jupingmall.api.domain.Post;
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.response.PostResponse;
 import com.jupingmall.api.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,18 @@ public class PostController {
         //          -> 한 번에 일괄적으로 잘 처리되는 케이스가 없다 -> 잘 관리하는 형태가 중요하다.
 //        Long postId = postService.write(request);
 //        return Map.of("postId", postId);
+        postService.write(request);
+    }
+
+    /**
+     * /posts -> 글 전체 조회(검색 + 페이징)
+     * /posts/{postId} -> 글 한개만 조회
+     */
+    @GetMapping("/posts/{postId}")
+    public PostResponse get(@PathVariable(name = "postId") Long id) {
+        // Request 클래스
+        // Response 클래스
+        PostResponse post = postService.get(id);
+       return post;
     }
 }
