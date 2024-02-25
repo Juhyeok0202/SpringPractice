@@ -2,6 +2,7 @@ package com.jupingmall.api.controller;
 
 import com.jupingmall.api.domain.Post;
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.request.PostSearch;
 import com.jupingmall.api.response.PostResponse;
 import com.jupingmall.api.response.Result;
 import com.jupingmall.api.service.PostService;
@@ -49,7 +50,7 @@ public class PostController {
     // 글이 -> 100,000,000 -> DB글 모두 조회하는경우 -> DB 뻗을 수 있다.
     // DB -> 애플리케이션 서버로 전달하는 시간, 트래픽비용 등이 많이 발생할 수 있다.
     @GetMapping("/posts")
-    public Result<PostResponse> getList(/*@PageableDefault*/ Pageable pageable) {
-        return new Result(postService.getList(pageable));
+    public Result<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
+        return new Result(postService.getList(postSearch));
     }
 }

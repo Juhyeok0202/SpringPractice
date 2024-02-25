@@ -3,6 +3,7 @@ package com.jupingmall.api.service;
 import com.jupingmall.api.domain.Post;
 import com.jupingmall.api.repository.PostRepository;
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.request.PostSearch;
 import com.jupingmall.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +51,9 @@ public class PostService {
                 .build();
     }
 
-    public List<PostResponse> getList(Pageable pageable) {
+    public List<PostResponse> getList(PostSearch postSearch) {
         // web -> page 1 -> (내부적으로) 0 변경 -> 수동으로 1로 해봤자 테스트 불가능(웹 요청을 통한 테스트 필요)
-        return postRepository.findAll(pageable).stream()
+        return postRepository.getList(postSearch).stream()
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
 

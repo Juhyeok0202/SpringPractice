@@ -3,6 +3,7 @@ package com.jupingmall.api.service;
 import com.jupingmall.api.domain.Post;
 import com.jupingmall.api.repository.PostRepository;
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.request.PostSearch;
 import com.jupingmall.api.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -91,13 +92,16 @@ class PostServiceTest {
         postRepository.saveAll(requestPosts);
 
         // sql -> select, limit, offset
-        Pageable pageable = PageRequest.of(0, 5, Sort.by(DESC, "id"));
-
+//        Pageable pageable = PageRequest.of(0, 5, Sort.by(DESC, "id"));
+        PostSearch postSearch = PostSearch.builder()
+                .page(1)
+//                .size(10) // 잘 변할 일이 없다. (화면 정책이 바뀌지 않는 이상.)
+                .build();
         //when
-        List<PostResponse> posts = postService.getList(pageable);
+        List<PostResponse> posts = postService.getList(postSearch);
 
         //then
-        assertEquals(5L, posts.size());
+        assertEquals(10L, posts.size());
         assertEquals("테스트 제목 30", posts.get(0).getTitle());
         assertEquals("테스트 내용 26", posts.get(4).getContent());
 
