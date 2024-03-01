@@ -1,6 +1,7 @@
 package com.jupingmall.api.domain;
 
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.request.PostEdit;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,6 +35,23 @@ public class Post {
                 .title(postCreate.getTitle())
                 .content(postCreate.getContent())
                 .build();
+    }
+
+    public PostEditor.PostEditorBuilder toEditor() {
+        // Post Entity가 가진 값으로 빌더를 만든다. -> data fix를 시키지 X
+        return PostEditor.builder()
+                .title(title)
+                .content(content);
+    }
+
+    public void edit(PostEditor postEditor) {
+        title = postEditor.getTitle();
+        content = postEditor.getContent();
+    }
+
+    public void change(PostEdit postEdit) {
+        title = postEdit.getTitle() != null ? postEdit.getTitle() : this.title;
+        content = postEdit.getContent() != null ? postEdit.getContent() : this.content;
     }
 
 //    public String getTitle() {

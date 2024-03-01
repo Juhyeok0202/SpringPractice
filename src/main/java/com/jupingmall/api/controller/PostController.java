@@ -2,6 +2,7 @@ package com.jupingmall.api.controller;
 
 import com.jupingmall.api.domain.Post;
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
 import com.jupingmall.api.response.PostResponse;
 import com.jupingmall.api.response.Result;
@@ -53,4 +54,11 @@ public class PostController {
     public Result<PostResponse> getList(@ModelAttribute PostSearch postSearch) {
         return new Result(postService.getList(postSearch));
     }
+
+    @PatchMapping("/posts/{postId}") //수정에 관한 것은 응답으로 안주는 편이지만, 클라이언트 측에서 필요하다면 변경된 엔티티를 주기도 함
+    public PostResponse edit(@PathVariable Long postId ,@ModelAttribute PostEdit request) {
+        return postService.edit(postId, request);
+    }
+
+
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jupingmall.api.domain.Post;
 import com.jupingmall.api.repository.PostRepository;
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,8 +23,7 @@ import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -192,5 +192,37 @@ class PostControllerTest {
                 .andExpect(jsonPath("$.data[0].title").value("테스트 제목 30"))
                 .andExpect(jsonPath("$.data[0].content").value("테스트 내용 30"))
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    void test7() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("원본 제목")
+                .content("원본 내용")
+                .build();
+
+        postRepository.save(post);
+
+        PostEdit request = PostEdit.builder()
+                .title("수정 제목")
+//                .content("원본 내용")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(patch("/posts/{postId}",post.getId())
+                .contentType(APPLICATION_JSON)
+                .content(json)
+        )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        //
+//        Post changedPost = postRepository.findById(post.getId()).get();
+//        assertEquals("수정 제목", changedPost.getTitle());
+//        assertEquals("원본 내용", changedPost.getContent());
     }
 }

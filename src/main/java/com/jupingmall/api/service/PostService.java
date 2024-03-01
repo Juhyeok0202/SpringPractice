@@ -1,30 +1,31 @@
 package com.jupingmall.api.service;
 
 import com.jupingmall.api.domain.Post;
+import com.jupingmall.api.domain.PostEditor;
 import com.jupingmall.api.repository.PostRepository;
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
 import com.jupingmall.api.response.PostResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.jupingmall.api.domain.Post.createPost;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Slf4j
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
 
+    @Transactional
     public void write(PostCreate postCreate) {
         Post post = createPost(postCreate);
         postRepository.save(post);
@@ -57,5 +58,25 @@ public class PostService {
                 .map(PostResponse::new)
                 .collect(Collectors.toList());
 
+    }
+
+    @Transactional
+    public PostResponse edit(Long id, PostEdit postEdit) {
+        Post post = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+
+//        //setting (Dirty Checking)
+//        post.change(postEdit);
+
+
+        /*[Post에 보조메서드 안만들고, Editor를 따로 만드는 이유]*/
+        PostEditor.PostEditorBuilder editorBuilder = post.toEditor();
+
+        PostEditor postEditor = editorBuilder.title(postEdit.getTitle())
+                .content(postEdit.getContent())
+                .build();
+
+        post.edit(postEditor);
+        return new PostResponse(post);
     }
 }

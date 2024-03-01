@@ -3,6 +3,7 @@ package com.jupingmall.api.service;
 import com.jupingmall.api.domain.Post;
 import com.jupingmall.api.repository.PostRepository;
 import com.jupingmall.api.request.PostCreate;
+import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
 import com.jupingmall.api.response.PostResponse;
 import org.junit.jupiter.api.Assertions;
@@ -81,7 +82,7 @@ class PostServiceTest {
 
     @Test
     @DisplayName("글 1페이지 조회")
-    public void test() throws Exception {
+    public void test3() throws Exception {
         //given
         List<Post> requestPosts = IntStream.range(1, 31)
                 .mapToObj(i -> Post.builder()
@@ -104,6 +105,60 @@ class PostServiceTest {
         assertEquals(10L, posts.size());
         assertEquals("테스트 제목 30", posts.get(0).getTitle());
         assertEquals("테스트 내용 26", posts.get(4).getContent());
+
+    }
+
+    @Test
+    @DisplayName("글 제목 수정")
+    public void test4() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("원본 제목")
+                .content("원본 내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit request = PostEdit.builder()
+                .title("수정 제목")
+                .content("원본 내용")
+                .build();
+
+        //when
+        postService.edit(post.getId(), request);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않스비다. id = " + post.getId()));
+
+        Assertions.assertEquals("수정 제목", changedPost.getTitle());
+        Assertions.assertEquals("원본 내용", changedPost.getContent());
+
+    }
+
+    @Test
+    @DisplayName("글 내용 수정")
+    public void test5() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("원본 제목")
+                .content("원본 내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit request = PostEdit.builder()
+//                .title("수정 제목")
+                .content("수정 내용")
+                .build();
+
+        //when
+        postService.edit(post.getId(), request);
+
+        //then
+        Post changedPost = postRepository.findById(post.getId())
+                .orElseThrow(() -> new RuntimeException("글이 존재하지 않스비다. id = " + post.getId()));
+
+        Assertions.assertEquals("원본 제목", changedPost.getTitle());
+        Assertions.assertEquals("수정 내용", changedPost.getContent());
 
     }
 }
