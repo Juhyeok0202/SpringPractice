@@ -7,6 +7,7 @@ import com.jupingmall.api.request.PostCreate;
 import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -224,5 +225,25 @@ class PostControllerTest {
 //        Post changedPost = postRepository.findById(post.getId()).get();
 //        assertEquals("수정 제목", changedPost.getTitle());
 //        assertEquals("원본 내용", changedPost.getContent());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    public void test8() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        //expected
+        mockMvc.perform(delete("/posts/{postId}", post.getId())
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(print());
+
+        Assertions.assertEquals(0, postRepository.count());
     }
 }

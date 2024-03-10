@@ -130,8 +130,8 @@ class PostServiceTest {
         Post changedPost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new RuntimeException("글이 존재하지 않스비다. id = " + post.getId()));
 
-        Assertions.assertEquals("수정 제목", changedPost.getTitle());
-        Assertions.assertEquals("원본 내용", changedPost.getContent());
+        assertEquals("수정 제목", changedPost.getTitle());
+        assertEquals("원본 내용", changedPost.getContent());
 
     }
 
@@ -157,8 +157,25 @@ class PostServiceTest {
         Post changedPost = postRepository.findById(post.getId())
                 .orElseThrow(() -> new RuntimeException("글이 존재하지 않스비다. id = " + post.getId()));
 
-        Assertions.assertEquals("원본 제목", changedPost.getTitle());
-        Assertions.assertEquals("수정 내용", changedPost.getContent());
+        assertEquals("원본 제목", changedPost.getTitle());
+        assertEquals("수정 내용", changedPost.getContent());
 
+    }
+
+    @Test
+    @DisplayName("게시글 삭제")
+    public void test6() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        //when
+        postService.delete(post.getId());
+
+        //then
+        assertEquals(0, postRepository.count());
     }
 }

@@ -56,9 +56,19 @@ public class PostController {
     }
 
     @PatchMapping("/posts/{postId}") //수정에 관한 것은 응답으로 안주는 편이지만, 클라이언트 측에서 필요하다면 변경된 엔티티를 주기도 함
-    public PostResponse edit(@PathVariable Long postId ,@ModelAttribute PostEdit request) {
+    public PostResponse edit(@PathVariable Long postId, @ModelAttribute PostEdit request) {
         return postService.edit(postId, request);
     }
 
+    @DeleteMapping("/posts/{postId}")
+    public void delete(@PathVariable Long postId) {
+        postService.delete(postId);
+    }
 
+    /**
+     * TODO : 인증 권한 작업, 예외처리
+     * 현재 상태에서는 해당 API의 URL을 알고 있는 사람 누구나 게시글을 CUD할 수 있음
+     * 인증 시스템 도입 필요.
+     * 예외 처리를 이쁘게 해놓지 못함.
+     */
 }
