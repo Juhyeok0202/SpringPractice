@@ -120,7 +120,7 @@ class PostServiceTest {
 
         PostEdit request = PostEdit.builder()
                 .title("수정 제목")
-                .content("원본 내용")
+                .content(null)
                 .build();
 
         //when

@@ -49,10 +49,10 @@ public class Post {
         content = postEditor.getContent();
     }
 
-    public void change(PostEdit postEdit) {
-        title = postEdit.getTitle() != null ? postEdit.getTitle() : this.title;
-        content = postEdit.getContent() != null ? postEdit.getContent() : this.content;
-    }
+//    public void change(PostEdit postEdit) {
+//        title = postEdit.getTitle() != null ? postEdit.getTitle() : this.title;
+//        content = postEdit.getContent() != null ? postEdit.getContent() : this.content;
+//    }
 
 //    public String getTitle() {
 //        // 서비스의 정책을 절대 넣지 말자.(서비스가 엔티티의 정책을 같이 공유하게됨.)
