@@ -246,4 +246,55 @@ class PostControllerTest {
 
         Assertions.assertEquals(0, postRepository.count());
     }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 조회")
+    public void test9() throws Exception {
+        //expected
+        mockMvc.perform(get("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON)
+                )
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 게시글 수정")
+    public void test10() throws Exception {
+        //when
+        PostEdit request = PostEdit.builder()
+                .title("수정 제목")
+                .content("수정 내용")
+                .build();
+
+        String json = objectMapper.writeValueAsString(request);
+
+        //expected
+        mockMvc.perform(patch("/posts/{postId}", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("게시글 작성시 제목에 '바보'는 포함될 수 없다.")
+    public void test11() throws Exception {
+        //given
+        PostCreate post = PostCreate.builder()
+                .title("나는 정말 바보!")
+                .content("내용")
+                .build();
+        String json = objectMapper.writeValueAsString(post);
+
+        //expected
+        mockMvc.perform(post("/posts")
+                        .contentType(APPLICATION_JSON)
+                        .content(json)
+                )
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+
+    }
 }
