@@ -1,5 +1,6 @@
 package com.jupingmall.api.controller;
 
+import com.jupingmall.api.exception.InvalidRequest;
 import com.jupingmall.api.request.PostCreate;
 import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
@@ -30,6 +31,7 @@ public class PostController {
         //          -> 한 번에 일괄적으로 잘 처리되는 케이스가 없다 -> 잘 관리하는 형태가 중요하다.
 //        Long postId = postService.write(request);
 //        return Map.of("postId", postId);
+        request.validate();
         postService.write(request);
     }
 
