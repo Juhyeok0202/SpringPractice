@@ -6,23 +6,18 @@ import com.jupingmall.api.request.PostCreate;
 import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
 import com.jupingmall.api.response.PostResponse;
-import org.junit.jupiter.api.Assertions;
+import com.jupingmall.api.exception.PostNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 
 @SpringBootTest
@@ -177,5 +172,62 @@ class PostServiceTest {
 
         //then
         assertEquals(0, postRepository.count());
+    }
+
+    @Test
+    @DisplayName("글 1개 조회 - 존재하지 않는 글")
+    public void test7() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        //expected
+
+        PostNotFound e = assertThrows(PostNotFound.class, () -> {
+            postService.get(post.getId() + 1L);
+        });
+
+        //IllegalArgumentException는 어디서든 터질 수 있다. -> 메세지도 테스트 필요
+        assertEquals("존재하지 않는 글입니다.", e.getMessage());
+    }
+
+    @Test
+    @DisplayName("게시글 삭제 - 존재하지 않는 글")
+    public void test8() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        //expected
+        assertThrows(PostNotFound.class, () -> {
+            postService.delete(post.getId() + 1L);
+        });
+    }
+
+    @Test
+    @DisplayName("게시글 수정 - 존재하지 않는 글")
+    public void test9() throws Exception {
+        //given
+        Post post = Post.builder()
+                .title("제목")
+                .content("내용")
+                .build();
+        postRepository.save(post);
+
+        PostEdit request = PostEdit.builder()
+                .title("수정 제목")
+                .content("수정 내용")
+                .build();
+
+        //expected
+        assertThrows(PostNotFound.class, () ->{
+            postService.edit(post.getId() + 1L , request);
+        });
     }
 }

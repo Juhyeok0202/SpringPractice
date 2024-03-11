@@ -7,6 +7,7 @@ import com.jupingmall.api.request.PostCreate;
 import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
 import com.jupingmall.api.response.PostResponse;
+import com.jupingmall.api.exception.PostNotFound;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class PostService {
 
     public PostResponse get(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotFound::new);
 
         // 응답 클래스 분리하세요 (서비스 정책에 맞는)
         // entity to response 작업을 여기서 하는게 맞을까?
@@ -63,7 +64,7 @@ public class PostService {
     @Transactional
     public PostResponse edit(Long id, PostEdit postEdit) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotFound::new);
 
 //        //setting (Dirty Checking)
 //        post.change(postEdit);
@@ -83,7 +84,7 @@ public class PostService {
     @Transactional
     public void delete(Long id) {
         Post post = postRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 글입니다."));
+                .orElseThrow(PostNotFound::new);
 
         // -> 존재하는 경우
         postRepository.delete(post);

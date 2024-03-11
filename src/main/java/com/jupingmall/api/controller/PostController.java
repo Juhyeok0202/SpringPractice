@@ -1,6 +1,5 @@
 package com.jupingmall.api.controller;
 
-import com.jupingmall.api.domain.Post;
 import com.jupingmall.api.request.PostCreate;
 import com.jupingmall.api.request.PostEdit;
 import com.jupingmall.api.request.PostSearch;
@@ -10,15 +9,7 @@ import com.jupingmall.api.service.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
